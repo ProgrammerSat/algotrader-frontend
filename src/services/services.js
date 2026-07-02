@@ -5,6 +5,7 @@ export const authService = {
   login: (data) => api.post('/api/auth/login', data),
   getFyersAuthUrl: () => api.get('/api/auth/fyers/initiate'),
   linkFyers: (auth_code) => api.post('/api/auth/fyers/link', { auth_code }),
+  checkFyersStatus: () => api.get('/api/auth/fyers/status'),
 };
 
 export const marketService = {

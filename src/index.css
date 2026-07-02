@@ -48,6 +48,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ── Scrollbar ─────────────────────────────────────────── */
@@ -57,7 +58,6 @@ body {
 
 /* ── Layout ─────────────────────────────────────────────── */
 .app-layout {
-  display: flex;
   min-height: 100vh;
 }
 
@@ -76,7 +76,6 @@ body {
 
 .main-content {
   margin-left: 240px;
-  flex: 1;
   padding: 2rem;
   min-height: 100vh;
 }

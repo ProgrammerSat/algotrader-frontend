@@ -295,13 +295,12 @@ function MarketBreadthCharts() {
 }
 
 export default function Dashboard() {
-  const { user, login } = useAuth();
+  const { user, updateUser } = useAuth();
   const [summary, setSummary] = useState(null);
   const [strategies, setStrategies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFyersModal, setShowFyersModal] = useState(false);
   const [fyersAuthUrl, setFyersAuthUrl] = useState('');
-  const [fyersLinked, setFyersLinked] = useState(user?.fyers_linked || false);
 
   useEffect(() => {
     Promise.all([tradeService.summary(), strategyService.list()])
@@ -322,16 +321,12 @@ export default function Dashboard() {
   };
 
   const handleLinked = () => {
-    setFyersLinked(true);
-    // Update stored user
-    const stored = JSON.parse(localStorage.getItem('user') || '{}');
-    stored.fyers_linked = true;
-    localStorage.setItem('user', JSON.stringify(stored));
+    updateUser({ fyers_linked: true });
   };
 
   const activeStrategies = strategies.filter(s => s.status === 'active');
   const pnl = summary?.total_pnl ?? 0;
-  const isLinked = fyersLinked || user?.fyers_linked;
+  const isLinked = user?.fyers_linked;
 
   return (
     <div>

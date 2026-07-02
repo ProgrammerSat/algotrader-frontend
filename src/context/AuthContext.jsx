@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { authService } from '../services/services';
 
 const AuthContext = createContext(null);
 
@@ -8,7 +9,18 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
-    if (stored) setUser(JSON.parse(stored));
+    if (stored) {
+      const parsedUser = JSON.parse(stored);
+      setUser(parsedUser);
+      
+      if (parsedUser.fyers_linked) {
+        authService.checkFyersStatus().then(res => {
+          if (res.data && !res.data.fyers_active) {
+            updateUser({ fyers_linked: false });
+          }
+        }).catch(() => {});
+      }
+    }
     setLoading(false);
   }, []);
 
@@ -23,8 +35,16 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateUser = (updates) => {
+    setUser(prev => {
+      const updated = { ...prev, ...updates };
+      localStorage.setItem('user', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
